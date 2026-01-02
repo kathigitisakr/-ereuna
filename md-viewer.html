@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Μεθοδολογία Έρευνας | Έγγραφο</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Marked.js for Markdown parsing -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        :root {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #242424;
+            --bg-tertiary: #2d2d2d;
+            --bg-code: #1e1e1e;
+            --accent: #d4a84b;
+            --accent-light: #f0c86e;
+            --text-primary: #e5e5e5;
+            --text-secondary: #a3a3a3;
+            --text-muted: #737373;
+            --border: #404040;
+            --link: #6bb3f0;
+            --success: #4ade80;
+            --warning: #fbbf24;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.7;
+            min-height: 100vh;
+        }
+        
+        /* Top navigation bar */
+        .top-bar {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(26, 26, 26, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            padding: 0.75rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+        
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        
+        .back-btn:hover {
+            background: var(--bg-tertiary);
+            border-color: var(--accent);
+        }
+        
+        .file-name {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            background: var(--bg-secondary);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            max-width: 300px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .top-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .action-btn {
+            padding: 0.5rem 0.75rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        
+        .action-btn:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+        
+        /* Main content container */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 4rem;
+        }
+        
+        /* Loading state */
+        .loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 50vh;
+            gap: 1rem;
+            color: var(--text-muted);
+        }
+        
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Error state */
+        .error {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-secondary);
+        }
+        
+        .error h2 {
+            color: #ef4444;
+            margin-bottom: 1rem;
+        }
+        
+        /* Markdown content styling - Claude-like */
+        .markdown-content {
+            animation: fadeIn 0.4s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .markdown-content h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 0 0 1.5rem 0;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--accent);
+            line-height: 1.3;
+        }
+        
+        .markdown-content h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin: 2.5rem 0 1rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .markdown-content h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin: 2rem 0 0.75rem 0;
+        }
+        
+        .markdown-content h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin: 1.5rem 0 0.5rem 0;
+        }
+        
+        .markdown-content p {
+            margin: 0 0 1rem 0;
+            color: var(--text-primary);
+        }
+        
+        .markdown-content a {
+            color: var(--link);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.2s;
+        }
+        
+        .markdown-content a:hover {
+            border-bottom-color: var(--link);
+        }
+        
+        .markdown-content strong {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .markdown-content em {
+            font-style: italic;
+            color: var(--text-secondary);
+        }
+        
+        /* Lists */
+        .markdown-content ul,
+        .markdown-content ol {
+            margin: 0 0 1rem 0;
+            padding-left: 1.5rem;
+        }
+        
+        .markdown-content li {
+            margin: 0.4rem 0;
+            color: var(--text-primary);
+        }
+        
+        .markdown-content li::marker {
+            color: var(--accent);
+        }
+        
+        /* Nested lists */
+        .markdown-content ul ul,
+        .markdown-content ol ol,
+        .markdown-content ul ol,
+        .markdown-content ol ul {
+            margin: 0.25rem 0 0.25rem 0;
+        }
+        
+        /* Code blocks */
+        .markdown-content pre {
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem 1.25rem;
+            margin: 1rem 0 1.5rem 0;
+            overflow-x: auto;
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        
+        .markdown-content pre code {
+            background: none;
+            padding: 0;
+            border-radius: 0;
+            font-size: inherit;
+            color: #e5e5e5;
+        }
+        
+        .markdown-content code {
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            background: var(--bg-tertiary);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.9em;
+            color: var(--accent-light);
+        }
+        
+        /* Blockquotes */
+        .markdown-content blockquote {
+            border-left: 4px solid var(--accent);
+            background: var(--bg-secondary);
+            margin: 1rem 0 1.5rem 0;
+            padding: 1rem 1.25rem;
+            border-radius: 0 8px 8px 0;
+            color: var(--text-secondary);
+        }
+        
+        .markdown-content blockquote p {
+            margin: 0;
+        }
+        
+        /* Tables */
+        .markdown-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0 1.5rem 0;
+            font-size: 0.95rem;
+        }
+        
+        .markdown-content th,
+        .markdown-content td {
+            border: 1px solid var(--border);
+            padding: 0.75rem 1rem;
+            text-align: left;
+        }
+        
+        .markdown-content th {
+            background: var(--bg-secondary);
+            font-weight: 600;
+            color: var(--accent-light);
+        }
+        
+        .markdown-content tr:nth-child(even) {
+            background: var(--bg-secondary);
+        }
+        
+        .markdown-content tr:hover {
+            background: var(--bg-tertiary);
+        }
+        
+        /* Horizontal rule */
+        .markdown-content hr {
+            border: none;
+            border-top: 1px solid var(--border);
+            margin: 2rem 0;
+        }
+        
+        /* Images */
+        .markdown-content img {
+            max-width: 100%;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+        
+        /* Checkboxes in lists */
+        .markdown-content input[type="checkbox"] {
+            margin-right: 0.5rem;
+            accent-color: var(--accent);
+        }
+        
+        /* Special formatting for emojis as headers */
+        .markdown-content h2:first-letter,
+        .markdown-content h3:first-letter {
+            margin-right: 0.25rem;
+        }
+        
+        /* Table of contents styling */
+        .toc {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .toc-title {
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .toc ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .toc li {
+            margin: 0.3rem 0;
+        }
+        
+        .toc a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        
+        .toc a:hover {
+            color: var(--accent);
+        }
+        
+        /* Print styles */
+        @media print {
+            .top-bar {
+                display: none;
+            }
+            
+            body {
+                background: white;
+                color: black;
+            }
+            
+            .markdown-content {
+                max-width: 100%;
+            }
+        }
+        
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            .top-bar {
+                padding: 0.5rem 1rem;
+                flex-wrap: wrap;
+            }
+            
+            .file-name {
+                order: 3;
+                width: 100%;
+                max-width: none;
+                text-align: center;
+                margin-top: 0.5rem;
+            }
+            
+            .container {
+                padding: 1.5rem 1rem;
+            }
+            
+            .markdown-content h1 {
+                font-size: 1.6rem;
+            }
+            
+            .markdown-content h2 {
+                font-size: 1.3rem;
+            }
+            
+            .markdown-content pre {
+                padding: 0.75rem 1rem;
+                font-size: 0.85rem;
+            }
+            
+            .markdown-content table {
+                font-size: 0.85rem;
+            }
+            
+            .markdown-content th,
+            .markdown-content td {
+                padding: 0.5rem 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="top-bar">
+        <a href="index.html" class="back-btn">
+            <span>←</span>
+            <span>Αρχική</span>
+        </a>
+        <span class="file-name" id="fileName">Φόρτωση...</span>
+        <div class="top-actions">
+            <button class="action-btn" onclick="window.print()" title="Εκτύπωση">🖨️</button>
+            <button class="action-btn" onclick="copyLink()" title="Αντιγραφή συνδέσμου">🔗</button>
+        </div>
+    </nav>
+    
+    <main class="container">
+        <div id="content">
+            <div class="loading">
+                <div class="spinner"></div>
+                <p>Φόρτωση εγγράφου...</p>
+            </div>
+        </div>
+    </main>
+    
+    <script>
+        // Get file from URL parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const file = urlParams.get('file');
+        
+        // File titles mapping
+        const fileTitles = {
+            'ΥΠΟΜΝΗΜΑ-ΜΕΘΟΔΟΛΟΓΙΑΣ-ΕΡΕΥΝΑΣ.md': 'Υπόμνημα Μεθοδολογίας Έρευνας',
+            'ΘΕΩΡΙΑ-ΣΥΝΤΟΜΗΣ-ΑΝΑΠΤΥΞΗΣ.md': 'Θεωρία Σύντομης Ανάπτυξης',
+            'ΕΡΩΤΗΣΕΙΣ-ΣΥΝΤΟΜΗΣ-ΑΝΑΠΤΥΞΗΣ.md': 'Ερωτήσεις Σύντομης Ανάπτυξης',
+            'ΛΥΣΕΙΣ-ΣΥΝΤΟΜΗΣ-ΑΝΑΠΤΥΞΗΣ.md': 'Λύσεις & Υποδείξεις',
+            'ΤΡΟΠΟΙ-ΕΞΑΣΚΗΣΗΣ.md': 'Τρόποι Εξάσκησης',
+            'ΟΔΗΓΙΕΣ.md': 'Οδηγίες Χρήσης'
+        };
+        
+        async function loadMarkdown() {
+            const contentDiv = document.getElementById('content');
+            const fileNameSpan = document.getElementById('fileName');
+            
+            if (!file) {
+                contentDiv.innerHTML = `
+                    <div class="error">
+                        <h2>⚠️ Δεν επιλέχθηκε αρχείο</h2>
+                        <p>Παρακαλώ επιστρέψτε στην <a href="index.html">αρχική σελίδα</a> και επιλέξτε ένα έγγραφο.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Update file name display
+            fileNameSpan.textContent = file;
+            
+            // Update page title
+            const pageTitle = fileTitles[file] || file.replace('.md', '');
+            document.title = `${pageTitle} | Μεθοδολογία Έρευνας`;
+            
+            try {
+                const response = await fetch(file);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                
+                const markdown = await response.text();
+                
+                // Configure marked options
+                marked.setOptions({
+                    breaks: true,
+                    gfm: true,
+                    headerIds: true,
+                    mangle: false
+                });
+                
+                // Parse markdown to HTML
+                const html = marked.parse(markdown);
+                
+                // Render content
+                contentDiv.innerHTML = `<article class="markdown-content">${html}</article>`;
+                
+                // Scroll to top
+                window.scrollTo(0, 0);
+                
+            } catch (error) {
+                console.error('Error loading markdown:', error);
+                contentDiv.innerHTML = `
+                    <div class="error">
+                        <h2>❌ Σφάλμα φόρτωσης</h2>
+                        <p>Δεν ήταν δυνατή η φόρτωση του αρχείου <code>${file}</code></p>
+                        <p style="margin-top: 1rem;">
+                            <a href="index.html">← Επιστροφή στην αρχική</a>
+                        </p>
+                    </div>
+                `;
+            }
+        }
+        
+        function copyLink() {
+            navigator.clipboard.writeText(window.location.href).then(() => {
+                const btn = event.target;
+                const originalText = btn.textContent;
+                btn.textContent = '✓';
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                }, 1500);
+            });
+        }
+        
+        // Load on page ready
+        loadMarkdown();
+    </script>
+</body>
+</html>
