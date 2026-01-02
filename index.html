@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Μεθοδολογία Εκπαιδευτικής Έρευνας | Υλικό Μελέτης</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;0,7..72,700;1,7..72,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0f1a;
+            --bg-secondary: #121a2d;
+            --bg-card: #1a2540;
+            --bg-card-hover: #223050;
+            --accent-gold: #d4a84b;
+            --accent-gold-light: #f0c86e;
+            --accent-blue: #4a8fe7;
+            --accent-cyan: #5dd9d0;
+            --accent-purple: #9d7af0;
+            --text-primary: #e8eaf0;
+            --text-secondary: #9aa3b8;
+            --text-muted: #5a6580;
+            --border-subtle: rgba(255,255,255,0.08);
+            --gradient-gold: linear-gradient(135deg, #d4a84b 0%, #f0c86e 100%);
+            --gradient-blue: linear-gradient(135deg, #4a8fe7 0%, #5dd9d0 100%);
+            --gradient-purple: linear-gradient(135deg, #9d7af0 0%, #e97af0 100%);
+            --shadow-glow: 0 0 40px rgba(212, 168, 75, 0.15);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Literata', Georgia, serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.7;
+            min-height: 100vh;
+        }
+        
+        /* Animated background */
+        .bg-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.4;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(74, 143, 231, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(212, 168, 75, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(157, 122, 240, 0.05) 0%, transparent 60%);
+        }
+        
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+        
+        /* Header */
+        header {
+            text-align: center;
+            padding: 3rem 0 4rem;
+            border-bottom: 1px solid var(--border-subtle);
+            margin-bottom: 3rem;
+        }
+        
+        .logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            background: var(--gradient-gold);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            box-shadow: var(--shadow-glow);
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        h1 {
+            font-size: clamp(1.8rem, 5vw, 2.8rem);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.02em;
+        }
+        
+        .subtitle {
+            font-size: 1.15rem;
+            color: var(--text-secondary);
+            font-style: italic;
+            font-weight: 400;
+        }
+        
+        .uni-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-subtle);
+            border-radius: 30px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        
+        /* Section titles */
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--border-subtle);
+        }
+        
+        .section-title h2 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .section-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+        
+        .icon-gold { background: var(--gradient-gold); }
+        .icon-blue { background: var(--gradient-blue); }
+        .icon-purple { background: var(--gradient-purple); }
+        
+        /* Cards grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 3rem;
+        }
+        
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-gold);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .card:hover {
+            background: var(--bg-card-hover);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+        }
+        
+        .card:hover::before {
+            opacity: 1;
+        }
+        
+        .card-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .card-emoji {
+            font-size: 1.8rem;
+            line-height: 1;
+        }
+        
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            line-height: 1.3;
+        }
+        
+        .card-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+        }
+        
+        .card-badge {
+            display: inline-block;
+            padding: 0.25rem 0.6rem;
+            background: rgba(212, 168, 75, 0.15);
+            color: var(--accent-gold-light);
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-family: 'JetBrains Mono', monospace;
+            margin-top: 0.75rem;
+        }
+        
+        .card-badge.blue {
+            background: rgba(74, 143, 231, 0.15);
+            color: var(--accent-blue);
+        }
+        
+        .card-badge.purple {
+            background: rgba(157, 122, 240, 0.15);
+            color: var(--accent-purple);
+        }
+        
+        .card-badge.cyan {
+            background: rgba(93, 217, 208, 0.15);
+            color: var(--accent-cyan);
+        }
+        
+        /* External links section */
+        .external-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+        
+        .ext-link {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.25rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.25s;
+        }
+        
+        .ext-link:hover {
+            background: var(--bg-card);
+            border-color: var(--accent-gold);
+            transform: translateX(4px);
+        }
+        
+        .ext-link-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            flex-shrink: 0;
+        }
+        
+        .ext-link-content {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .ext-link-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+        }
+        
+        .ext-link-url {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-family: 'JetBrains Mono', monospace;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .ext-link-arrow {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            transition: transform 0.25s;
+        }
+        
+        .ext-link:hover .ext-link-arrow {
+            transform: translateX(4px);
+            color: var(--accent-gold);
+        }
+        
+        /* Video section */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+        
+        .video-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 1.25rem;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.25s;
+        }
+        
+        .video-card:hover {
+            background: var(--bg-card-hover);
+            border-color: rgba(255,0,0,0.3);
+        }
+        
+        .video-card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .youtube-icon {
+            width: 32px;
+            height: 24px;
+            background: #ff0000;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.9rem;
+        }
+        
+        .video-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .video-desc {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+        
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 2rem;
+            border-top: 1px solid var(--border-subtle);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        
+        footer a {
+            color: var(--accent-gold);
+            text-decoration: none;
+        }
+        
+        footer a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            header {
+                padding: 2rem 0 3rem;
+            }
+            
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .external-links {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Entrance animations */
+        .fade-in {
+            animation: fadeIn 0.6s ease-out forwards;
+            opacity: 0;
+        }
+        
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+        
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+        .delay-5 { animation-delay: 0.5s; }
+    </style>
+</head>
+<body>
+    <div class="bg-pattern"></div>
+    
+    <div class="container">
+        <header class="fade-in">
+            <div class="logo">📚</div>
+            <h1>Μεθοδολογία Εκπαιδευτικής Έρευνας</h1>
+            <p class="subtitle">Υλικό Μελέτης & Διαδραστικά Quiz</p>
+            <div class="uni-badge">
+                🎓 Πανεπιστήμιο Πατρών — Μεταπτυχιακό Εκπαιδευτικής Διοίκησης
+            </div>
+        </header>
+        
+        <!-- Διαδραστικά Quiz -->
+        <section class="fade-in delay-1">
+            <div class="section-title">
+                <div class="section-icon icon-gold">🎯</div>
+                <h2>Διαδραστικά Quiz Εξάσκησης</h2>
+            </div>
+            <div class="cards-grid">
+                <a href="quiz-methodology-with-theory.html" class="card">
+                    <div class="card-header">
+                        <span class="card-emoji">📝</span>
+                        <span class="card-title">Quiz Πολλαπλής Επιλογής</span>
+                    </div>
+                    <p class="card-desc">47 ερωτήσεις με ενσωματωμένη θεωρία για κάθε ερώτηση. Ιδανικό για αρχική μελέτη.</p>
+                    <span class="card-badge">47 ερωτήσεις • HTML</span>
+                </a>
+                
+                <a href="quiz-methodology-standalone.html" class="card">
+                    <div class="card-header">
+                        <span class="card-emoji">⚡</span>
+                        <span class="card-title">Quiz Γρήγορης Εξάσκησης</span>
+                    </div>
+                    <p class="card-desc">Standalone έκδοση χωρίς θεωρία. Για επανάληψη και αυτοαξιολόγηση.</p>
+                    <span class="card-badge blue">47 ερωτήσεις • HTML</span>
+                </a>
+                
+                <a href="quiz-short-answer.html" class="card">
+                    <div class="card-header">
+                        <span class="card-emoji">✍️</span>
+                        <span class="card-title">Quiz Σύντομης Ανάπτυξης</span>
+                    </div>
+                    <p class="card-desc">13 ερωτήσεις ανάπτυξης με υποδείξεις, πρότυπες απαντήσεις και αυτοβαθμολόγηση.</p>
+                    <span class="card-badge purple">13 ερωτήσεις • HTML</span>
+                </a>
+            </div>
+        </section>
+        
+        <!-- Θεωρητικό Υλικό -->
+        <section class="fade-in delay-2">
+            <div class="section-title">
+                <div class="section-icon icon-blue">📖</div>
+                <h2>Θεωρητικό Υλικό & Λύσεις</h2>
+            </div>
+            <div class="cards-grid">
+                <a href="ΥΠΟΜΝΗΜΑ-ΜΕΘΟΔΟΛΟΓΙΑΣ-ΕΡΕΥΝΑΣ.md" class="card">
+                    <div class="card-header">
+                        <span class="card-emoji">📘</span>
+                        <span class="card-title">Υπόμνημα Μεθοδολογίας</span>
+                    </div>
+                    <p class="card-desc">Πλήρης θεωρία για όλες τις 47 ερωτήσεις πολλαπλής επιλογής.</p>
+                    <span class="card-badge cyan">Markdown</span>
+                </a>
+                
+                <a href="ΘΕΩΡΙΑ-ΣΥΝΤΟΜΗΣ-ΑΝΑΠΤΥΞΗΣ.md" class="card">
+                    <div class="card-header">
+                        <span class="card-emoji">📗</span>
+                        <span class="card-title">Θεωρία Σύντομης Ανάπτυξης</span>
+                    </div>
+                    <p class="card-desc">11 θεματικές ενότητες για τις ερωτήσεις ανάπτυξης.</p>
+                    <span class="card-badge cyan">Markdown</span>
+                </a>
+                
+                <a href="ΕΡΩΤΗΣΕΙΣ-ΣΥΝΤΟΜΗΣ-ΑΝΑΠΤΥΞΗΣ.md" class="card">
+                    <div class="card-header">
+                        <span class="card-emoji">❓</span>
+                        <span class="card-title">Ερωτήσεις Σύντομης Ανάπτυξης</span>
+                    </div>
+                    <p class="card-desc">13 ερωτήσεις χωρίς απαντήσεις για εξάσκηση.</p>
+                    <span class="card-badge cyan">Markdown</span>
+                </a>
+                
+                <a href="ΛΥΣΕΙΣ-ΣΥΝΤΟΜΗΣ-ΑΝΑΠΤΥΞΗΣ.md" class="card">
+                    <div class="card-header">
+                        <span class="card-emoji">✅</span>
+                        <span class="card-title">Λύσεις & Υποδείξεις</span>
+                    </div>
+                    <p class="card-desc">Πρότυπες απαντήσεις με hints για κάθε ερώτηση.</p>
+                    <span class="card-badge cyan">Markdown</span>
+                </a>
+                
+                <a href="ΤΡΟΠΟΙ-ΕΞΑΣΚΗΣΗΣ.md" class="card">
+                    <div class="card-header">
+                        <span class="card-emoji">🎯</span>
+                        <span class="card-title">Τρόποι Εξάσκησης</span>
+                    </div>
+                    <p class="card-desc">10 μέθοδοι μελέτης: flashcards, Pomodoro, mind maps κ.ά.</p>
+                    <span class="card-badge cyan">Markdown</span>
+                </a>
+                
+                <a href="Ενδεικτικές_ερωτήσεις_-_απαντήσεις_στη_μεθοδολογία_εκπαιδευτικής_έρευνας__1_.pdf" class="card">
+                    <div class="card-header">
+                        <span class="card-emoji">📄</span>
+                        <span class="card-title">Αρχικές Ερωτήσεις (PDF)</span>
+                    </div>
+                    <p class="card-desc">Το αρχικό PDF με όλες τις ενδεικτικές ερωτήσεις-απαντήσεις.</p>
+                    <span class="card-badge">PDF</span>
+                </a>
+            </div>
+        </section>
+        
+        <!-- Επίσημοι Σύνδεσμοι -->
+        <section class="fade-in delay-3">
+            <div class="section-title">
+                <div class="section-icon icon-purple">🔗</div>
+                <h2>Επίσημοι Σύνδεσμοι Μαθήματος</h2>
+            </div>
+            <div class="external-links">
+                <a href="https://notebooklm.google.com/notebook/867f5565-2f99-40ef-bd5b-387c138db952" target="_blank" class="ext-link">
+                    <div class="ext-link-icon" style="background: linear-gradient(135deg, #4285f4, #34a853);">🤖</div>
+                    <div class="ext-link-content">
+                        <div class="ext-link-title">NotebookLM — AI Βοηθός</div>
+                        <div class="ext-link-url">notebooklm.google.com</div>
+                    </div>
+                    <span class="ext-link-arrow">→</span>
+                </a>
+                
+                <a href="https://eclass.upatras.gr/courses/MST173/" target="_blank" class="ext-link">
+                    <div class="ext-link-icon" style="background: linear-gradient(135deg, #0066cc, #003d7a);">🎓</div>
+                    <div class="ext-link-content">
+                        <div class="ext-link-title">E-Class Πανεπιστημίου Πατρών</div>
+                        <div class="ext-link-url">eclass.upatras.gr/courses/MST173</div>
+                    </div>
+                    <span class="ext-link-arrow">→</span>
+                </a>
+                
+                <a href="https://drive.google.com/drive/folders/1D_j-UbFH7D--N2Uda747IdLdP0JeQsnm" target="_blank" class="ext-link">
+                    <div class="ext-link-icon" style="background: linear-gradient(135deg, #fbbc04, #ea4335);">📁</div>
+                    <div class="ext-link-content">
+                        <div class="ext-link-title">Google Drive Μαθήματος</div>
+                        <div class="ext-link-url">drive.google.com</div>
+                    </div>
+                    <span class="ext-link-arrow">→</span>
+                </a>
+            </div>
+        </section>
+        
+        <!-- Βοηθητικοί Πόροι -->
+        <section class="fade-in delay-4">
+            <div class="section-title">
+                <div class="section-icon icon-gold">📚</div>
+                <h2>Βοηθητικοί Πόροι & Βιβλιογραφία</h2>
+            </div>
+            <div class="external-links">
+                <a href="https://edge.sagepub.com/creswellrd5e" target="_blank" class="ext-link">
+                    <div class="ext-link-icon" style="background: linear-gradient(135deg, #006400, #228b22);">📕</div>
+                    <div class="ext-link-content">
+                        <div class="ext-link-title">SAGE Companion — Creswell 5η Έκδοση</div>
+                        <div class="ext-link-url">Quiz, βίντεο, επιστημονικά άρθρα</div>
+                    </div>
+                    <span class="ext-link-arrow">→</span>
+                </a>
+                
+                <a href="https://opencourses.uoa.gr/courses/PPP104/" target="_blank" class="ext-link">
+                    <div class="ext-link-icon" style="background: linear-gradient(135deg, #1a237e, #3f51b5);">🏛️</div>
+                    <div class="ext-link-content">
+                        <div class="ext-link-title">Ανοικτά Μαθήματα ΕΚΠΑ</div>
+                        <div class="ext-link-url">Μεθοδολογία Εκπαιδευτικής Έρευνας</div>
+                    </div>
+                    <span class="ext-link-arrow">→</span>
+                </a>
+                
+                <a href="https://learn.eap.gr" target="_blank" class="ext-link">
+                    <div class="ext-link-icon" style="background: linear-gradient(135deg, #00695c, #26a69a);">📖</div>
+                    <div class="ext-link-content">
+                        <div class="ext-link-title">ΕΑΠ Learn Platform</div>
+                        <div class="ext-link-url">Ανοικτά διαδικτυακά μαθήματα</div>
+                    </div>
+                    <span class="ext-link-arrow">→</span>
+                </a>
+            </div>
+        </section>
+        
+        <!-- YouTube -->
+        <section class="fade-in delay-5">
+            <div class="section-title">
+                <div class="section-icon" style="background: linear-gradient(135deg, #ff0000, #cc0000);">▶️</div>
+                <h2>Ελληνικά Video-Μαθήματα</h2>
+            </div>
+            <div class="video-grid">
+                <a href="https://vedu.gr/?lid=iKgDHDVCPjOPXjPP5N2zDQ" target="_blank" class="video-card">
+                    <div class="video-card-header">
+                        <div class="youtube-icon">▶</div>
+                        <span class="video-title">VEDU.gr</span>
+                    </div>
+                    <p class="video-desc">Μεθοδολογία Επιστημονικής Έρευνας — ΤΕΙ Καβάλας</p>
+                </a>
+                
+                <a href="https://www.youtube.com/results?search_query=μεθοδολογία+έρευνας+ελληνικά" target="_blank" class="video-card">
+                    <div class="video-card-header">
+                        <div class="youtube-icon">▶</div>
+                        <span class="video-title">YouTube Search</span>
+                    </div>
+                    <p class="video-desc">Αναζήτηση: Μεθοδολογία Έρευνας στα Ελληνικά</p>
+                </a>
+                
+                <a href="https://www.youtube.com/results?search_query=research+methods+education" target="_blank" class="video-card">
+                    <div class="video-card-header">
+                        <div class="youtube-icon">▶</div>
+                        <span class="video-title">Research Methods</span>
+                    </div>
+                    <p class="video-desc">University of Amsterdam & άλλα κανάλια</p>
+                </a>
+                
+                <a href="https://www.youtube.com/results?search_query=SPSS+tutorial+ελληνικά" target="_blank" class="video-card">
+                    <div class="video-card-header">
+                        <div class="youtube-icon">▶</div>
+                        <span class="video-title">SPSS Tutorials</span>
+                    </div>
+                    <p class="video-desc">Στατιστική ανάλυση δεδομένων</p>
+                </a>
+            </div>
+        </section>
+        
+        <footer>
+            <p>Δημιουργήθηκε για το μάθημα <strong>Μεθοδολογία Εκπαιδευτικής Έρευνας</strong></p>
+            <p style="margin-top: 0.5rem;">
+                Βασισμένο στο βιβλίο: <em>Creswell, J.W. — Educational Research</em>
+            </p>
+            <p style="margin-top: 1rem; opacity: 0.7;">
+                Made with ❤️ by <a href="https://claude.ai">Claude AI</a> • 2026
+            </p>
+        </footer>
+    </div>
+</body>
+</html>
